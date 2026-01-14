@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { RippleModule } from 'primeng/ripple';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AppFloatingConfigurator } from "../../layout/component/app.floatingconfigurator";
+import { Component } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { ButtonModule } from "primeng/button";
+import { CheckboxModule } from "primeng/checkbox";
+import { InputTextModule } from "primeng/inputtext";
+import { PasswordModule } from "primeng/password";
+import { RippleModule } from "primeng/ripple";
 
 @Component({
-    selector: 'app-login',
+    selector:'app-signup',
     standalone: true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
-    template: `
+    template:`
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
@@ -37,10 +37,19 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </g>
                             </svg>
                             <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                            <span class="text-muted-color font-medium">Sign in to continue</span>
+                            <span class="text-muted-color font-medium">SignIn to continue</span>
                         </div>
 
                         <div>
+                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Your name</label>
+                            <input pInputText id="email1" type="text" placeholder="Your familly name" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+
+                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+
+                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+
                             <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
                             <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
 
@@ -57,10 +66,8 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                             
                            <div class="flex flex-col gap-4">
                                 <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
-                                <p-button label="Sign Up" styleClass="w-full p-button-outlined" routerLink="/signUp"></p-button>
+                                <p-button label="Sign Up" styleClass="w-full p-button-outlined"></p-button>
                             </div>
-
-                            
                         </div>
                     </div>
                 </div>
@@ -68,17 +75,12 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
         </div>
     `
 })
-export class Login {
+
+export class Signup{
+
     email: string = '';
 
     password: string = '';
 
     checked: boolean = false;
-
-    constructor(private router:Router){}
-
-    goToSignUp()
-    {
-        this.router.navigate(['/signUp']);
-    }
 }
