@@ -7,11 +7,14 @@ import { CheckboxModule } from "primeng/checkbox";
 import { InputTextModule } from "primeng/inputtext";
 import { PasswordModule } from "primeng/password";
 import { RippleModule } from "primeng/ripple";
-
+import {UserService} from "../service/user.service";
 @Component({
     selector:'app-signup',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ButtonModule, 
+                CheckboxModule, InputTextModule, 
+                PasswordModule, FormsModule, 
+                RouterModule, RippleModule, AppFloatingConfigurator],
     template:`
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
@@ -36,38 +39,46 @@ import { RippleModule } from "primeng/ripple";
                                     />
                                 </g>
                             </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome garage</div>
                             <span class="text-muted-color font-medium">SignIn to continue</span>
                         </div>
+                       
 
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Your name</label>
-                            <input pInputText id="email1" type="text" placeholder="Your familly name" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                           <form (ngSubmit) = "addUser()" #myForm="ngForm">
+                            <label for="nom" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Family name</label>
+                            <input pInputText id="nom" type="text" placeholder="Your familly name" class="w-full md:w-120 mb-8" [(ngModel)]="newUser.nom" [ngModelOptions]="{standalone: true}" name="nom" />
+
+                            <label for="prenom" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Last name</label>
+                            <input pInputText id="prenom" type="text" placeholder="Your last name" class="w-full md:w-120 mb-8" [(ngModel)]="newUser.prenom" [ngModelOptions]="{standalone: true}" name = "prenom" />
 
                             <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="newUser.email" [ngModelOptions]="{standalone: true}" name = "email" />
 
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
-
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
-
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                            <label for="pwd" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Password</label>
+                            <p-password id="password1" [(ngModel)]="newUser.pwd" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [ngModelOptions]="{standalone: true}" [feedback]="false"></p-password>
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
+                                    <p-checkbox [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" id="rememberme1" binary class="mr-2"></p-checkbox>
                                     <label for="rememberme1">Remember me</label>
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
                             
-                           <div class="flex flex-col gap-4">
-                                <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
-                                <p-button label="Sign Up" styleClass="w-full p-button-outlined"></p-button>
+                            <div>
+                                <p-button label="Sign Up" styleClass="w-full" type="submit"></p-button>
+                            </div> 
+                            </form>
+
+                            <div class="mt-4">
+                                <p-button
+                                    label="Sign In"
+                                    styleClass="w-full p-button-outlined"
+                                    routerLink="/">
+                                </p-button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -78,9 +89,34 @@ import { RippleModule } from "primeng/ripple";
 
 export class Signup{
 
-    email: string = '';
+    constructor(private userservice:UserService){};
 
-    password: string = '';
-
+    newUser = {nom:'',prenom:'',email:'',pwd:'',fonction:''}
     checked: boolean = false;
+
+    addUser()
+    {
+           const user = {
+                nom: this.newUser.nom,
+                prenom: this.newUser.prenom,
+                email: this.newUser.email,
+                pwd:this.newUser.pwd,
+                fonction:'client'
+            };
+
+            this.userservice.saveUsers(user).subscribe({
+                next: (res) => {
+                console.log('Utilisateur ajouté :', res);
+                // optionnel : redirection
+                this.newUser = { nom:'', prenom:'', email:'',pwd:'', fonction:'' };
+            },
+            error: (err) => {
+                console.error('Erreur lors de l\'ajout', err);
+            }
+            });
+        
+       
+    }
+
+
 }
