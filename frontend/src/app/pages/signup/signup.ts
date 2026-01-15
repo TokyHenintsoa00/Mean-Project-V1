@@ -1,7 +1,7 @@
 import { AppFloatingConfigurator } from "../../layout/component/app.floatingconfigurator";
 import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { RouterModule } from "@angular/router";
+import { RouterModule , Router } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { CheckboxModule } from "primeng/checkbox";
 import { InputTextModule } from "primeng/inputtext";
@@ -89,7 +89,7 @@ import {UserService} from "../service/user.service";
 
 export class Signup{
 
-    constructor(private userservice:UserService){};
+    constructor(private userservice:UserService , private router:Router){};
 
     newUser = {nom:'',prenom:'',email:'',pwd:'',fonction:''}
     checked: boolean = false;
@@ -109,6 +109,7 @@ export class Signup{
                 console.log('Utilisateur ajouté :', res);
                 // optionnel : redirection
                 this.newUser = { nom:'', prenom:'', email:'',pwd:'', fonction:'' };
+                this.router.navigate(['/homePage'])
             },
             error: (err) => {
                 console.error('Erreur lors de l\'ajout', err);
