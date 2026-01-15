@@ -93,7 +93,7 @@ export class Signup{
 
     newUser = {nom:'',prenom:'',email:'',pwd:'',fonction:''}
     checked: boolean = false;
-
+//fefefe
     addUser()
     {
            const user = {
