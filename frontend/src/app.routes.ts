@@ -9,26 +9,15 @@ import { Signup } from '@/pages/signup/signup';
 
 
 export const appRoutes: Routes = [
-    {
-        path: '',
-        component: Login
-        // children: [
-        //     { path: '', component: Dashboard },
-        //     { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-        //     { path: 'documentation', component: Documentation },
-        //     { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
-        // ]
-    },
+    {path: '',component: Login},
     { path: 'landing', component: Landing },
     {path:'signUp', component: Signup},
     {path: 'homePage',
         component: AppLayout,
         children: [
             { path: '', component: Dashboard },
-            { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-            { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
-        ]},
+            { path: 'homeClient', loadChildren: () => import('./app/pages/homeClient/homeClient.routes') }
+    ]},
     
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },

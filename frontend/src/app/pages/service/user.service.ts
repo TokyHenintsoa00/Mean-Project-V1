@@ -15,4 +15,10 @@ export class UserService{
     {
         return this.http.post(`${this.apiUrl}/register`, users);
     }
+
+
+    login(users:any):Observable<any>
+    {
+        return this.http.post(`${this.apiUrl}/login`,users)
+    }
 }

@@ -22,4 +22,33 @@ router.post('/register', async (req, res) => {
   res.status(201).json({ message: 'User created' });
 });
 
+  //  const isMatch = await bcrypt.compare(password, user.password);
+
+
+router.post('/login',async (req,res) =>{
+  const{email,pwd} = req.body;
+  
+  //find user by email
+  const user = await User.findOne({email});
+  if(!user)
+  {
+    console.log("user invalid");
+    alert("user invalid");
+  }
+  const matchPwd = await bcrypt.compare(pwd , user.pwd);
+
+  if(!matchPwd)
+  {
+    console.log("Pwd ou email incorrect");
+    alert("email ou pwd incorrect")
+  }
+  else{
+    // 3️⃣ Succès
+    res.json({
+      message: 'Login successful',
+      userId: user._id
+    });
+  }
+});
+
 module.exports = router;

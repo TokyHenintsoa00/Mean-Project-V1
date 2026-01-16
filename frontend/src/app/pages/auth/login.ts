@@ -7,10 +7,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-
+import { UserService } from '../service/user.service';
 @Component({
     selector: 'app-login',
-    standalone: true,
+    standalone:true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
         <app-floating-configurator />
@@ -41,26 +41,27 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                         </div>
 
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                            <form (ngSubmit) = "login()" #myForm="ngForm">
+                                <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                                <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="loginUser.email" [ngModelOptions]="{standalone: true}" name = "email" />
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                                <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                                <p-password id="password1" [(ngModel)]="loginUser.pwd" [ngModelOptions]="{standalone: true}" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
 
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Remember me</label>
+                                <div class="flex items-center justify-between mt-2 mb-8 gap-8">
+                                    <div class="flex items-center">
+                                        <p-checkbox [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" id="rememberme1" binary class="mr-2"></p-checkbox>
+                                        <label for="rememberme1">Remember me</label>
+                                    </div>
+                                    <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                                 </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                            </div>
-                            
-                           <div class="flex flex-col gap-4">
-                                <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                                <div>
+                                    <p-button label="Sign In" styleClass="w-full" type="submit"></p-button>
+                                </div>
+                            </form>
+                            <div class="mt-4">
                                 <p-button label="Sign Up" styleClass="w-full p-button-outlined" routerLink="/signUp"></p-button>
                             </div>
-
-                            
                         </div>
                     </div>
                 </div>
@@ -69,13 +70,33 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
     `
 })
 export class Login {
-    email: string = '';
+    // email: string = '';
 
-    password: string = '';
+    // password: string = '';
+    constructor(private userservice:UserService , private router:Router ){};
+    loginUser = {email:'',pwd:''};
 
     checked: boolean = false;
 
-    constructor(private router:Router){}
+
+
+    login()
+    {
+        console.log("click dans log");
+        
+        // const user = {email:this.loginUser.email , pwd:this.loginUser.pwd};
+
+        // this.userservice.login(user).subscribe({
+        //     next:(res) =>{
+        //         this.loginUser = {email:'',pwd:''};
+        //         this.router.navigate(['/homePage']);
+        //     },
+        //     error:(err)=>{
+        //         console.log("Erreur dans ",err);
+                
+        //     }
+        // });
+    }
 
     goToSignUp()
     {
