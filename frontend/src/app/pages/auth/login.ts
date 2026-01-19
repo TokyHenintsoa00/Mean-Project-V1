@@ -82,20 +82,20 @@ export class Login {
 
     login()
     {
-        console.log("click dans log");
+        //console.log("click dans log");
         
-        // const user = {email:this.loginUser.email , pwd:this.loginUser.pwd};
+        const user = {email:this.loginUser.email , pwd:this.loginUser.pwd};
 
-        // this.userservice.login(user).subscribe({
-        //     next:(res) =>{
-        //         this.loginUser = {email:'',pwd:''};
-        //         this.router.navigate(['/homePage']);
-        //     },
-        //     error:(err)=>{
-        //         console.log("Erreur dans ",err);
+        this.userservice.login(user).subscribe({
+            next:(res) =>{
+                this.loginUser = {email:'',pwd:''};
+                this.router.navigate(['/homePage']);
+            },
+            error:(err)=>{
+                console.log("Erreur dans ",err);
                 
-        //     }
-        // });
+            }
+        });
     }
 
     goToSignUp()

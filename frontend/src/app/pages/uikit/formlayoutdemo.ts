@@ -120,9 +120,9 @@ import { TextareaModule } from 'primeng/textarea';
 })
 export class FormLayoutDemo {
     dropdownItems = [
-        { name: 'Option 1', code: 'Option 1' },
-        { name: 'Option 2', code: 'Option 2' },
-        { name: 'Option 3', code: 'Option 3' }
+        { name: 'Option 1' },
+        { name: 'Option 2'  },
+        { name: 'Option 3' }
     ];
 
     dropdownItem = null;

@@ -26,9 +26,9 @@ export class AppMenu {
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/homePage'] }]
             },
             {
-                label: 'UI Components',
+                label: 'garage ',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/homePage/homeClient/formlayout']},
+                    { label: 'Demande de rendez-vous', icon: 'pi pi-fw pi-id-card', routerLink: ['/homePage/homeClient/rdvClient']},
                 ]
             },
            
