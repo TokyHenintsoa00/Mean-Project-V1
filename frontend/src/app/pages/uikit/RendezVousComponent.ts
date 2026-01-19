@@ -8,6 +8,7 @@ import { FluidModule } from "primeng/fluid";
 import { InputTextModule } from "primeng/inputtext";
 import { TextareaModule } from "primeng/textarea";
 import { FileUploadModule } from 'primeng/fileupload';
+import { MessageService } from "primeng/api";
 
 @Component({
     selector: 'app-rdv-demo',
@@ -22,6 +23,7 @@ import { FileUploadModule } from 'primeng/fileupload';
         TextareaModule,
         FileUploadModule
     ],
+    
     template: `
 <p-fluid>
     <div class="flex flex-col md:flex-row gap-8">
@@ -56,24 +58,30 @@ import { FileUploadModule } from 'primeng/fileupload';
                         pInputTextarea
                         id="description"
                         rows="4"
-                        placeholder="Your family name"
+                        placeholder="Dscription du probleme de voiture"
                         class="w-full md:w-120 mb-8">
                     </textarea>
+
+                     <label class="font-medium">Photo de votre voiture</label>
+
+                    <p-fileupload
+                        name="demo[]"
+                        (onUpload)="onUpload($event)"
+                        [multiple]="true"
+                        accept="image/*"
+                        maxFileSize="100000000"
+                        mode="advanced"
+                        url="https://www.primefaces.org/cdn/api/upload.php"
+                        class="w-full"
+                    >
+                        <ng-template #empty>
+                            <div class="text-center p-4">
+                                Glissez-déposez les fichiers ici
+                            </div>
+                        </ng-template>
+                    </p-fileupload>
                 </div>
 
-
-                <!-- File -->
-                <div class="flex flex-col gap-2">
-                    <label class="font-medium">Photo de la voiture</label>
-                    <p-fileUpload
-                        mode="basic"
-                        name="file"
-                        chooseLabel="Choose file"
-                        accept=".pdf,.jpg,.png"
-                        maxFileSize="5000000"
-                        class="w-full">
-                    </p-fileUpload>
-                </div>
 
 
                 <!-- Button -->
@@ -85,14 +93,19 @@ import { FileUploadModule } from 'primeng/fileupload';
         </div>
     </div>
 </p-fluid>
-`
+`,
+providers: [MessageService]
 })
 export class RendezVousComponent {
 
-    roles = [
-        { label: 'Student', value: 'student' },
-        { label: 'Teacher', value: 'teacher' },
-        { label: 'Admin', value: 'admin' }
-    ];
+    uploadedFiles: any[] = [];
+    constructor(private messageService: MessageService) {}
+    onUpload(event: any) {
+        for (const file of event.files) {
+            this.uploadedFiles.push(file);
+        }
+
+        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    }
 
 }
