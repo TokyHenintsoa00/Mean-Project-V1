@@ -15,5 +15,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/garage')
   .catch(err => console.error(err));
 
 app.use('/users', require('./routes/UserRouter'));
+app.use('/rdv', require('./routes/RendezVousRouter'));
+
 app.listen(PORT, () => console.log(`Serveur démarré sur le port
 ${PORT}`));

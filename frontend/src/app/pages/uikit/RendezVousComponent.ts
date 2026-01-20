@@ -27,7 +27,7 @@ import { MessageService } from "primeng/api";
     template: `
 <p-fluid>
     <div class="flex flex-col md:flex-row gap-8">
-        <div class="md:w-1/2">
+        <div class="md:w-1/1 ">
             <div class="card flex flex-col gap-6 shadow-2 border-round-xl">
 
                 <div class="font-semibold text-xl text-primary">
@@ -38,12 +38,12 @@ import { MessageService } from "primeng/api";
                 <div class="flex flex-wrap gap-6">
                     <div class="flex flex-col grow basis-0 gap-2">
                         <label for="name" class="font-medium">Name</label>
-                        <input pInputText id="name" type="text" placeholder="Enter your name" />
+                        <input pInputText id="name" type="text" [(ngModel)] = "newRdv.nomClient" placeholder="Enter your name" />
                     </div>
 
                     <div class="flex flex-col grow basis-0 gap-2">
                         <label for="email" class="font-medium">Email</label>
-                        <input pInputText id="email" type="email" placeholder="Enter your email" />
+                        <input pInputText id="email" type="email" [(ngModel)] = "newRdv.emailClient" placeholder="Enter your email" />
                     </div>
                 </div>
 
@@ -98,14 +98,16 @@ providers: [MessageService]
 })
 export class RendezVousComponent {
 
-    uploadedFiles: any[] = [];
-    constructor(private messageService: MessageService) {}
-    onUpload(event: any) {
-        for (const file of event.files) {
-            this.uploadedFiles.push(file);
-        }
+    newRdv = {nomClient:'',emailClient:''};
 
-        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    // uploadedFiles: any[] = [];
+    // constructor(private messageService: MessageService) {}
+    onUpload(event: any) {
+        // for (const file of event.files) {
+        //     this.uploadedFiles.push(file);
+        // }
+
+        // this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
     }
 
 }
