@@ -50,6 +50,7 @@ import { Router } from "@angular/router";
                     </div>
 
                     <div>
+                    <br>
                         <label for="name" class="font-medium">Model de voiture</label>
                         <input pInputText id="nom" type="text" [(ngModel)] = "newRdv.modelVoiture" [ngModelOptions]="{standalone: true}" placeholder="Constructeur-XXX-XXX" class="w-full md:w-120 mb-8"/>
                     
@@ -63,7 +64,7 @@ import { Router } from "@angular/router";
                             placeholder="Dscription du probleme de voiture"
                             class="w-full md:w-120 mb-8">
                         </textarea>
-
+        
                         <label class="font-medium">Photo de votre voiture</label>
 
                         <p-fileupload
@@ -84,7 +85,7 @@ import { Router } from "@angular/router";
                             </ng-template>
                         </p-fileupload>
                     </div>
-                    
+                    <br>
                     <!-- Button -->
                     <div class="flex justify-end pt-2">
                         <button pButton label="Submit" icon="pi pi-check"></button>
@@ -101,14 +102,18 @@ providers: [MessageService]
 export class RendezVousComponent {
 
     newRdv = {nomClient:'',emailClient:'',modelVoiture:'',problemeVoiture:'',photoVoiture:[] as File[]};
+    
     onFileSelected(event:any){
 
         let getFile = event.target.files;
-        // this.newRdv.photoVoiture =Array.from(getFile);
+        //this.newRdv.photoVoiture = Array.from(getFile);
         this.newRdv.photoVoiture = [];
-        getFile.forEach((file:File) => {
-            this.newRdv.photoVoiture.push(file)
+        getFile.forEach((getFiles: any) => {
+            this.newRdv.photoVoiture.push(getFiles)
         });
+        // getFile.forEach((file:File) => {
+        //     this.newRdv.photoVoiture.push(file)
+        // });
 
     }
     constructor(private userservice:UserService , private rdvService:RdvService,private router:Router){};
@@ -117,35 +122,33 @@ export class RendezVousComponent {
 
     addRdv(){
         
-        const rdv = {
-            nomClient:this.newRdv.nomClient,
-            emailClient:this.newRdv.emailClient,
-            modelVoiture:this.newRdv.modelVoiture,
-            problemeVoiture:this.newRdv.problemeVoiture,
-            photoVoiture: this.newRdv.photoVoiture
-        }
-        this.rdvService.rdvClient(rdv).subscribe({
-
-            next:(res) =>{
-                console.log("mety");
-                this.newRdv = {nomClient:'',emailClient:'',modelVoiture:'',
-                problemeVoiture:'',photoVoiture:[] as File[]};
-
-                
-                
+        //console.log("click btn");
+        try 
+        {
+            const rdv = {
+                nomClient:this.newRdv.nomClient,
+                emailClient:this.newRdv.emailClient,
+                modelVoiture:this.newRdv.modelVoiture,
+                problemeVoiture:this.newRdv.problemeVoiture,
+                photoVoiture: this.newRdv.photoVoiture
             }
-            
-        });
+            this.rdvService.rdvClient(rdv).subscribe({
+
+                next:(res) =>{
+                    console.log("mety");
+                    this.newRdv = {nomClient:'',emailClient:'',modelVoiture:'',
+                    problemeVoiture:'',photoVoiture:[] as File[]};
+                    // this.router.navigate(['/homePage/homeClient/rdvClient']);
+                }
+                
+            });    
+        } catch (error) {
+            console.log(error);
+               
+        }
+        
     }
 
-    // uploadedFiles: any[] = [];
-    // constructor(private messageService: MessageService) {}
-    onUpload(event: any) {
-        // for (const file of event.files) {
-        //     this.uploadedFiles.push(file);
-        // }
-
-        // this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
-    }
+ 
 
 }
