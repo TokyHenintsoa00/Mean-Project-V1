@@ -20,7 +20,10 @@ router.post('/rdvClient',async function (req,res) {
 
         
         if (!user) {
+           
+            
             console.log("user non disponible");
+
             return res.status(400).json({ message: "Utilisateur non disponible" });
             
             
@@ -31,7 +34,8 @@ router.post('/rdvClient',async function (req,res) {
         else{
             const rdv = new Rdv( rdvClient );
             await rdv.save();
-
+            console.log("rdv inserer");
+            
             res.status(200).json({message:"rdv inserer"});
         }
     }

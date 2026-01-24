@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
 import { ButtonModule } from "primeng/button";
@@ -12,7 +12,7 @@ import { MessageService } from "primeng/api";
 import { RdvService } from "../service/rdv.service";
 import { UserService } from "../service/user.service";
 import { Router } from "@angular/router";
-
+import { DatePickerModule } from 'primeng/datepicker';
 @Component({
     selector: 'app-rdv-demo',
     standalone: true,
@@ -24,7 +24,8 @@ import { Router } from "@angular/router";
         SelectModule,
         FluidModule,
         TextareaModule,
-        FileUploadModule
+        FileUploadModule,
+        DatePickerModule
     ],
     
     template: `
@@ -51,9 +52,26 @@ import { Router } from "@angular/router";
 
                     <div>
                     <br>
-                        <label for="name" class="font-medium">Model de voiture</label>
-                        <input pInputText id="nom" type="text" [(ngModel)] = "newRdv.modelVoiture" [ngModelOptions]="{standalone: true}" placeholder="Constructeur-XXX-XXX" class="w-full md:w-120 mb-8"/>
-                    
+                    <div class="flex flex-wrap gap-6">
+                        <div class="flex flex-col grow basis-0 gap-2">
+                            <label for="name" class="font-medium">Model de voiture</label>
+                            <input pInputText id="nom" type="text" [(ngModel)] = "newRdv.modelVoiture" [ngModelOptions]="{standalone: true}" placeholder="Constructeur-XXX-XXX" class="w-full md:w-120 mb-8"/>
+                        </div>
+                        <div class="flex flex-col grow basis-0 gap-2">
+                                <label for="dateRdv" class="font-medium">Date de rendez-vous</label>
+                                <p-datepicker 
+                                    id="dateRdv"
+                                    [(ngModel)]="newRdv.dateRdv" 
+                                    [ngModelOptions]="{standalone: true}"
+                                    [minDate]="minDate"
+                                    [showTime]="true"
+                                    hourFormat="24"
+                                    dateFormat="dd/mm/yy"
+                                    placeholder="Sélectionner date et heure"
+                                    [showIcon]="true">
+                                </p-datepicker>
+                        </div>
+                    </div>
                         <label for="name" class="font-medium">Definir le probleme de votre voiture</label>
                         <textarea
                             pInputTextarea
@@ -99,18 +117,44 @@ import { Router } from "@angular/router";
 `,
 providers: [MessageService]
 })
-export class RendezVousComponent {
+export class RendezVousComponent implements OnInit{
 
-    newRdv = {nomClient:'',emailClient:'',modelVoiture:'',problemeVoiture:'',photoVoiture:[] as File[]};
+    //newRdv = {nomClient:'',emailClient:'',modelVoiture:'',problemeVoiture:'',photoVoiture:[] as File[]};
+    newRdv = {
+        nomClient: null as string|null,
+        emailClient:'',
+        modelVoiture:'',
+        dateRdv: null as Date|null,
+        dateRdvDispo:null,
+        problemeVoiture:'',
+        photoVoiture:[] as File[]
+    };
+    
+    minDate!: Date ; // Date minimale => now aujourd'hui
+    
+    ngOnInit() {
+        this.minDate = new Date();
+    }
+
     
     onFileSelected(event:any){
 
-        let getFile = event.target.files;
-        //this.newRdv.photoVoiture = Array.from(getFile);
-        this.newRdv.photoVoiture = [];
-        getFile.forEach((getFiles: any) => {
-            this.newRdv.photoVoiture.push(getFiles)
-        });
+        try 
+        {
+            let getFile = event.target.files;
+        } catch (error) {
+            console.error(error);
+            
+        }
+        
+        
+        // console.log(getFile);
+        
+        // //this.newRdv.photoVoiture = Array.from(getFile);
+        // this.newRdv.photoVoiture = [];
+        // getFile.forEach((getFiles: any) => {
+        //     this.newRdv.photoVoiture.push(getFiles)
+        // });
         // getFile.forEach((file:File) => {
         //     this.newRdv.photoVoiture.push(file)
         // });
@@ -125,25 +169,31 @@ export class RendezVousComponent {
         //console.log("click btn");
         try 
         {
+            // const rdv = {
+            //     nom_client:this.newRdv.nomClient,
+            //     email_client:this.newRdv.emailClient,
+            //     modelVoiture:this.newRdv.modelVoiture,
+            //     problemeVoiture:this.newRdv.problemeVoiture,
+            //     photoVoiture: this.newRdv.photoVoiture
+            // }
             const rdv = {
-                nomClient:this.newRdv.nomClient,
-                emailClient:this.newRdv.emailClient,
-                modelVoiture:this.newRdv.modelVoiture,
-                problemeVoiture:this.newRdv.problemeVoiture,
-                photoVoiture: this.newRdv.photoVoiture
-            }
-            this.rdvService.rdvClient(rdv).subscribe({
+                //nom client //email client //model de voiture
+                //probleme de voiture //date de rdv 
+                //photo voiture
 
-                next:(res) =>{
-                    console.log("mety");
-                    this.newRdv = {nomClient:'',emailClient:'',modelVoiture:'',
-                    problemeVoiture:'',photoVoiture:[] as File[]};
-                    // this.router.navigate(['/homePage/homeClient/rdvClient']);
-                }
+            }
+            // this.rdvService.rdvClient(rdv).subscribe({
+
+            //     next:(res) =>{
+            //         console.log("mety");
+            //         this.newRdv = {nomClient:'',emailClient:'',modelVoiture:'',
+            //         problemeVoiture:'',photoVoiture:[] as File[]};
+            //         // this.router.navigate(['/homePage/homeClient/rdvClient']);
+            //     }
                 
-            });    
+            // });    
         } catch (error) {
-            console.log(error);
+            console.error(error);
                
         }
         

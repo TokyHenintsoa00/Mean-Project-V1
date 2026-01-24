@@ -11,8 +11,10 @@ export class RdvService{
 
     constructor(private http: HttpClient) {}
 
-    rdvClient(rdv:any):Observable<any>{
+    rdvClient(rdv: any): Observable<any>{
         return this.http.post(`${this.apiUrl}/rdvClient` , rdv);
     }
+
+   
 
 }
