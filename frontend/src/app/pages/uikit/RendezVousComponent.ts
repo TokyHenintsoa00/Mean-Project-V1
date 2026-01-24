@@ -114,7 +114,8 @@ import { DatePickerModule } from 'primeng/datepicker';
         </div>
     </div>
 </p-fluid>
-`,
+`
+,
 providers: [MessageService]
 })
 export class RendezVousComponent implements OnInit{
