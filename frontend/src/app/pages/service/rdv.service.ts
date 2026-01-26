@@ -20,10 +20,10 @@ export class RdvService{
         formData.append('date_rendez_vous',rdv.date_rendez_vous);
 
         rdv.photo_voiture.forEach((file:File) => {
-            formData.append('photo_voiture',rdv.photo_voiture)
+            formData.append('photo_voiture',file)
         });
 
-        return this.http.post(`${this.apiUrl}/rdvClient` , rdv);
+        return this.http.post(`${this.apiUrl}/rdvClient` , formData);
     }
 
    
