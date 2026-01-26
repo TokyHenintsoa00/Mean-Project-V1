@@ -63,7 +63,7 @@ import { DatePickerModule } from 'primeng/datepicker';
                                     id="dateRdv"
                                     [(ngModel)]="newRdv.dateRdv" 
                                     [ngModelOptions]="{standalone: true}"
-                                    [minDate]="minDate"
+                                    
                                     [showTime]="true"
                                     hourFormat="24"
                                     dateFormat="dd/mm/yy"
@@ -86,7 +86,7 @@ import { DatePickerModule } from 'primeng/datepicker';
                         <label class="font-medium">Photo de votre voiture</label>
 
                         <p-fileupload
-                            (change)="onFileSelected($event)"
+                            (onSelect)="onFileSelected($event)"
                             type = "file"
                             [ngModelOptions]="{standalone: true}"
                             [(ngModel)] = "newRdv.photoVoiture"
@@ -118,7 +118,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 ,
 providers: [MessageService]
 })
-export class RendezVousComponent implements OnInit{
+export class RendezVousComponent {
+
+    constructor(private userservice:UserService , private rdvService:RdvService,private router:Router){};
 
     //newRdv = {nomClient:'',emailClient:'',modelVoiture:'',problemeVoiture:'',photoVoiture:[] as File[]};
     newRdv = {
@@ -131,75 +133,95 @@ export class RendezVousComponent implements OnInit{
         photoVoiture:[] as File[]
     };
     
-    minDate!: Date ; // Date minimale => now aujourd'hui
+  
+    // minDate!: Date ; // Date minimale => now aujourd'hui
     
-    ngOnInit() {
-        this.minDate = new Date();
-    }
+    // ngOnInit() {
+    //     this.minDate = new Date();
+    // }
 
     
     onFileSelected(event:any){
 
         try 
         {
-            let getFile = event.target.files;
+            let getFile = event.files;
+            console.log(getFile);
+            //  let newGetfile;
+            //  newGetfile = this.newRdv.photoVoiture = Array.from(getFile);
+            // console.log(newGetfile);
+            for (let i = 0; i <= getFile.length-1; i++) {
+                this.newRdv.photoVoiture.push(getFile[i]);
+                console.log(getFile[i]);      
+            };
         } catch (error) {
-            console.error(error);
-            
+            console.error(error);   
+        }
+       
+    }
+    
+    addRdv(){
+        
+        console.log("click btn");
+        try 
+        {
+            const date_Rendez_vous = this.newRdv.dateRdv;
+            const problemeVoiture = this.newRdv.problemeVoiture;
+            if (date_Rendez_vous !=null && date_Rendez_vous < new Date) {
+                alert("la date ne doit pas etre moin que adj");
+                console.log("error");  
+            }
+            this.createRdvWithVoitureProblem(problemeVoiture);   
+        } catch (error) {
+            console.error(error);    
         }
         
-        
-        // console.log(getFile);
-        
-        // //this.newRdv.photoVoiture = Array.from(getFile);
-        // this.newRdv.photoVoiture = [];
-        // getFile.forEach((getFiles: any) => {
-        //     this.newRdv.photoVoiture.push(getFiles)
-        // });
-        // getFile.forEach((file:File) => {
-        //     this.newRdv.photoVoiture.push(file)
-        // });
-
     }
-    constructor(private userservice:UserService , private rdvService:RdvService,private router:Router){};
+
+    // with no probleme voiture
+    private createRdvWithVoitureProblem(problemeVoiture:String):void
+    {
+        const rdv = {
+                        
+            nom_client:this.newRdv.nomClient,
+            email_client:this.newRdv.emailClient,
+            model_voiture:this.newRdv.modelVoiture,
+            probleme_voiture:this.newRdv.problemeVoiture,
+            date_rendez_vous:this.newRdv.dateRdv,
+            date_rendez_vous_disponible:null,
+            photo_voiture:this.newRdv.photoVoiture
+            
+        }
+        this.rdvService.rdvClient(rdv).subscribe({
+            next:(res) =>{
+                console.log("mety");
+                this.resetForm();
+                this.router.navigate(['/homePage/homeClient/rdvClient']);
+            },
+            error: (err) => {
+                console.error('Erreur lors de la création du rendez-vous:', err);
+                alert('Erreur lors de la création du rendez-vous');
+            }
+        });
+    }   
 
     
 
-    addRdv(){
-        
-        //console.log("click btn");
-        try 
-        {
-            // const rdv = {
-            //     nom_client:this.newRdv.nomClient,
-            //     email_client:this.newRdv.emailClient,
-            //     modelVoiture:this.newRdv.modelVoiture,
-            //     problemeVoiture:this.newRdv.problemeVoiture,
-            //     photoVoiture: this.newRdv.photoVoiture
-            // }
-            const rdv = {
-                //nom client //email client //model de voiture
-                //probleme de voiture //date de rdv 
-                //photo voiture
-
-            }
-            // this.rdvService.rdvClient(rdv).subscribe({
-
-            //     next:(res) =>{
-            //         console.log("mety");
-            //         this.newRdv = {nomClient:'',emailClient:'',modelVoiture:'',
-            //         problemeVoiture:'',photoVoiture:[] as File[]};
-            //         // this.router.navigate(['/homePage/homeClient/rdvClient']);
-            //     }
-                
-            // });    
-        } catch (error) {
-            console.error(error);
-               
-        }
+    private resetForm(): void {
+        this.newRdv = {
+           nomClient: null as string|null,
+            emailClient:'',
+            modelVoiture:'',
+            dateRdv: null as Date|null,
+            dateRdvDispo:null,
+            problemeVoiture:'',
+            photoVoiture:[] as File[]
+        };
+    }
+ 
+    addRdvProblem()
+    {
         
     }
-
- 
 
 }
