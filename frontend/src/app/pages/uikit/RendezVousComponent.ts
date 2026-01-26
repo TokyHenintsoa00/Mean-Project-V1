@@ -171,7 +171,8 @@ export class RendezVousComponent {
                 alert("la date ne doit pas etre moin que adj");
                 console.log("error");  
             }
-            this.createRdvWithVoitureProblem(problemeVoiture);   
+            this.createRdvWithVoitureProblem(problemeVoiture);  
+            
         } catch (error) {
             console.error(error);    
         }
@@ -196,7 +197,9 @@ export class RendezVousComponent {
             next:(res) =>{
                 console.log("mety");
                 this.resetForm();
-                this.router.navigate(['/homePage/homeClient/rdvClient']);
+                location.reload();
+                //this.router.navigate(['/homePage/homeClient/rdvClient']);
+               
             },
             error: (err) => {
                 console.error('Erreur lors de la création du rendez-vous:', err);

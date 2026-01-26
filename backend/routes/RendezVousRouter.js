@@ -13,12 +13,12 @@ router.post('/rdvClient',upload.array('photo_voiture', 10),async function (req,r
 
     try{
 
-         const photo = req.files.map(file => ({
-                filename: file.originalname,
-                url: '', // À remplir si vous sauvegardez sur un serveur de fichiers
-                size: file.size,
-                mimetype: file.mimetype
-            }));
+        const photo = req.files.map(file => ({
+            filename: file.originalname,
+            url: '', // À remplir si vous sauvegardez sur un serveur de fichiers
+            size: file.size,
+            mimetype: file.mimetype
+        }));
 
 
         const rdvClient = {
